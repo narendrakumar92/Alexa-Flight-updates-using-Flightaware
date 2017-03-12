@@ -1,14 +1,3 @@
-"""
-Leaving this here in case it's helpful for people reading this code...it's based on the sample kit
-
-This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
-The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
-as testing instructions are located at http://amzn.to/1LzFrj6
-
-For additional samples, visit the Alexa Skills Kit Getting Started guide at
-http://amzn.to/1LGWsLG
-"""
-
 from __future__ import print_function
 import base64
 import urllib2
@@ -51,7 +40,7 @@ def on_intent(intent_request, session):
 
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
-
+    print(intent_name)
     # Dispatch to your skill's intent handlers
     if intent_name == "FlightStatus":
         return flight_status(intent, session)
@@ -63,6 +52,8 @@ def on_intent(intent_request, session):
         return airport_operation(intent, session)
     elif intent_name == "ZipcodeDetails":
         return zipcode_details(intent, session)
+    elif intent_name == "AirlineInsight":
+        return airline_insight(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     else:
@@ -75,7 +66,7 @@ def on_intent(intent_request, session):
 def get_welcome_response():
     session_attributes = {}
     card_title = "Welcome"
-    speech_output = "Please say an airline and flight number"
+    speech_output = "Please say a flight number"
 
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
@@ -121,6 +112,47 @@ def flight_details(intent, session):
     
     return build_response({}, build_speechlet_response(
         "Flight Details", speech_output, "", True))
+
+def airline_insight(intent, session):
+   
+    speech_output = ""
+
+   
+    reprompt_text = ""
+    should_end_session = False
+    
+    from1 = intent['slots']['FlightNumberFrom']['value']
+    to1 = intent['slots']['FlightNumberTo']['value']
+    
+    req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/AirlineInsight?origin=%s&destination=%s&reportType=1" %(from1,to1))
+    
+    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    req.add_header("Authorization", "Basic %s" % base64string) 
+    
+    
+    
+    
+    print(req)
+    resp = urllib2.urlopen(req)
+
+    data = json.loads(resp.read())
+    print(data)
+    car = data['AirlineInsightResult']['data'][0]['carrier']
+    percent = data['AirlineInsightResult']['data'][0]['percent']
+    fare_min = data['AirlineInsightResult']['data'][0]['fare_min']
+    fare_median = data['AirlineInsightResult']['data'][0]['fare_median']
+    fare_max = data['AirlineInsightResult']['data'][0]['fare_max']
+    
+    speech_output = "The best carrier for the given source and destination is %s, with %s people opting for the airline it offers a minimum fare of %s dollars and median fare of %s dollars and maximum fare of %s dollars" % (car,
+                                                                                     percent,
+                                                                                     fare_min,
+                                                                                     fare_median,
+                                                                                     fare_max,
+                                                                                     )
+    
+    return build_response({}, build_speechlet_response(
+        "Flight Details", speech_output, "", True))
+
 
 def zipcode_details(intent, session):
    
@@ -227,8 +259,8 @@ def airport_operation(intent, session):
 
 def flight_status(intent, session):
 
-    if 'Airline' not in intent['slots'] or 'FlightNumber' not in intent['slots']:
-        return get_welcome_response()
+   # if 'Airline' not in intent['slots'] or 'FlightNumber' not in intent['slots']:
+    #    return get_welcome_response()
 
     # hacking these classes in right now because AWS Lambda doesn't support an easy "import pytz" and I didn't upload it yet
     class TZ_UTC(datetime.tzinfo):
@@ -261,24 +293,25 @@ def flight_status(intent, session):
         def tzname(self, dt):
             return "US/Pacific"
 
-    airline_name = intent['slots']['Airline']['value']
-    airline_code = ""
+    #airline_name = intent['slots']['Airline']['value']
+    #airline_code = ""
 
     # these happen to be airlines I care about right now, need to convert to a dict lookup or better
-    if airline_name == "united":
-        airline_code = "UA"
-    elif airline_name == "delta":
-        airline_code = "DL"
-    elif airline_name == "jet blue":
-        airline_code = "JBU"
-    elif airline_name == "alaska" or airline_name == "alaska airlines":
-        airline_code = "ASA"
-    elif airline_name == "american" or airline_name == "american airlines":
-        airline_code = "AAL"
-    elif airline_name == "virgin" or airline_name == "virgin america":
-        airline_code = "VRD"
+    #if airline_name == "united":
+    #    airline_code = "UA"
+    #elif airline_name == "delta":
+    #    airline_code = "DL"
+    #elif airline_name == "jet blue":
+     #   airline_code = "JBU"
+    #elif airline_name == "alaska" or airline_name == "alaska airlines":
+        #airline_code = "ASA"
+    #elif airline_name == "american" or airline_name == "american airlines":
+     #   airline_code = "AAL"
+    #elif airline_name == "virgin" or airline_name == "virgin america":
+       # airline_code = "VRD"
 
-    ident = "%s%s" % (airline_code, intent['slots']['FlightNumber']['value'])
+   # ident = "%s%s" % (airline_code, intent['slots']['FlightNumber']['value'])
+    ident = intent['slots']['FlightNumber']['value']
     print("HI:"+ident)
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/FlightInfo?ident=%s" % ident)
     
@@ -299,7 +332,7 @@ def flight_status(intent, session):
         if estimated_arrival_time.date() == datetime.date.today():
             break
 
-    airline_name = intent['slots']['Airline']['value']
+   # airline_name = intent['slots']['Airline']['value']
     flight_number = intent['slots']['FlightNumber']['value']
 
     speech_output = ""
@@ -310,8 +343,7 @@ def flight_status(intent, session):
 
         # FIXME this doesn't necessarily handle delays on departure? nor does it say on-time or late because FlightAware API sucks
 
-        speech_output = "%s %s is departing %s for %s in %s hours and %s minutes" % (airline_name,
-                                                                                     flight_number,
+        speech_output = "%s is departing %s for %s in %s hours and %s minutes" % (flight_number,
                                                                                      flight['originCity'],
                                                                                      flight['destinationCity'],
                                                                                      delta.seconds / (60*60),
@@ -322,8 +354,7 @@ def flight_status(intent, session):
         delta = datetime.datetime.now() - actual_arrival_time
         hours = delta.seconds / (60*60)
 
-        speech_output = "%s %s arrived at %s %s%s%s minutes ago" % (airline_name,
-                                                                            flight_number,
+        speech_output = "%s arrived at %s %s%s%s minutes ago" % (flight_number,
                                                                             flight['destinationCity'],
                                                                             hours if hours > 0 else "",
                                                                             " hours and " if (hours > 1) else (" hour and " if (hours == 1) else ""),
@@ -333,8 +364,7 @@ def flight_status(intent, session):
         estimated_arrival_time = estimated_arrival_time.replace(tzinfo=TZ_UTC())
         estimated_arrival_time = estimated_arrival_time.astimezone(tz=TZ_PST())
 
-        speech_output = "%s %s is arriving at %s on time at %s" % (airline_name,
-                                                                   flight_number,
+        speech_output = "%s is arriving at %s on time at %s" % (flight_number,
                                                                    flight['destinationCity'],
                                                                    estimated_arrival_time.strftime("%H:%M")
                                                                    )
