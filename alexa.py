@@ -315,7 +315,7 @@ def flight_status(intent, session):
     print("HI:"+ident)
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/FlightInfo?ident=%s" % ident)
     
-    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    base64string = base64.encodestring('%s:%s' % ('<flighaware username>', '<Use your pwd>')).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base64string) 
     
     
