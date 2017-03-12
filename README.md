@@ -36,15 +36,37 @@ Finds the city, state and county pertaining to the given Zipcode
 
 Eg: Find Zipcode details for 85281
 
+Source to Destination
+
+Finds the min budget airlines, max budget airlines, the airline 
+
+Alexa, From PHX to LAX
 
 Installation:
 
 Create a new Lambda function, copy the code given in alexa.py. Use the intents given in intent_schema file and the following sample utterences
 
 
-FlightStatus flight status for {Airline} {FlightNumber}
+FlightStatus flight status report for {FlightNumber}
+FlightStatus status for {FlightNumber}
+FlightStatus bing status for {FlightNumber}
+FlightStatus retrieve status for {FlightNumber}
+FlightStatus status {FlightNumber}
+FlightStatus status for {FlightNumber}
 FlightDetails flight details for {FlightNumber}
+FlightDetails details for {FlightNumber}
+FlightDetails flight information {FlightNumber}
+FlightDetails information {FlightNumber}
 InFlightInfo In flight details for {FlightNumber}
+InFlightInfo Inside details for {FlightNumber}
+InFlightInfo Insight details for {FlightNumber}
 AirportOperation Airport Operation details for {FlightNumber}
+AirportOperation Operation details for {FlightNumber}
+AirportOperation Operation list for {FlightNumber}
+AirportOperation Operation for {FlightNumber}
 ZipcodeDetails Find Zipcode details for {FlightNumber}
+ZipcodeDetails Zipcode {FlightNumber}
+ZipcodeDetails Zipcode for {FlightNumber}
+AirlineInsight from {FlightNumberFrom} to {FlightNumberTo}
+
 
