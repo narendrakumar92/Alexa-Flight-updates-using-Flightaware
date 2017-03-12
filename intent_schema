@@ -54,6 +54,20 @@
       ]
     },
     {
+      "intent": "AirlineInsight",
+      "slots": [
+        
+        {
+          "name": "FlightNumberFrom",
+          "type": "AIRLINE"
+        },
+        {
+          "name": "FlightNumberTo",
+          "type": "AIRLINE"
+        }
+      ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]
