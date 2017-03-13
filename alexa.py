@@ -12,7 +12,7 @@ def lambda_handler(event, context):
     event['session']['application']['applicationId'] = 'amzn1.ask.skill.7aab8c9b-10f8-4ec7-954b-4ce49b4a2ce8'
     print("event.session.application.applicationId=" + event['session']['application']['applicationId'])
     if (event['session']['application']['applicationId'] !=
-        'amzn1.ask.skill.7aab8c9b-10f8-4ec7-954b-4ce49b4a2ce8'):
+        '<APPLICATION ID>'):
         raise ValueError("Invalid Application ID")
 
     if event['request']['type'] == "LaunchRequest":
@@ -88,7 +88,7 @@ def flight_details(intent, session):
     
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/AirlineInfo?airlineCode=%s" % airline_name)
     
-    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    base64string = base64.encodestring('%s:%s' % ('<flighaware username>', '<Use your pwd>')).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base64string) 
     
     
@@ -126,7 +126,7 @@ def airline_insight(intent, session):
     
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/AirlineInsight?origin=%s&destination=%s&reportType=1" %(from1,to1))
     
-    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    base64string = base64.encodestring('%s:%s' % ('<flighaware username>', '<Use your pwd>')).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base64string) 
     
     
@@ -166,7 +166,7 @@ def zipcode_details(intent, session):
     
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/ZipcodeInfo?zipcode=%s" % zipcode)
     
-    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    base64string = base64.encodestring('%s:%s' % ('<flighaware username>', '<Use your pwd>')).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base64string) 
     
     
@@ -200,7 +200,7 @@ def inflight_info(intent, session):
     
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/InFlightInfo?ident=%s" % airline_name)
     
-    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    base64string = base64.encodestring('%s:%s' % ('<flighaware username>', '<Use your pwd>')).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base64string) 
     
     
@@ -233,7 +233,7 @@ def airport_operation(intent, session):
     print(airport_name)
     req = urllib2.Request("http://flightxml.flightaware.com/json/FlightXML2/CountAirportOperations?airport=%s" % airport_name)
     
-    base64string = base64.encodestring('%s:%s' % ('santoshmandyajayaram', '9dc19f2f66a7be55a7c05e50f9e4dd17d7f238fa')).replace('\n', '')
+    base64string = base64.encodestring('%s:%s' % ('<flighaware username>', '<Use your pwd>')).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base64string) 
     
     
