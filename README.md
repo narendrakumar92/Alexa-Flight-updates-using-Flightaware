@@ -70,5 +70,6 @@ ZipcodeDetails Zipcode for {FlightNumber}
 AirlineInsight from {FlightNumberFrom} to {FlightNumberTo}
 
 
-video demo : https://youtu.be/4ndvdq1vgnQ
+video demo : https://www.youtube.com/watch?v=hgrdMJlcAaY
+demo2: https://youtu.be/4ndvdq1vgnQ
 
